@@ -122,3 +122,23 @@ model_info = {
 
 with open('sentiment_model.pkl', 'wb') as f:
     pickle.dump(model_info, f)
+
+# Test prediction function
+def predict_sentiment(text):
+    """Function to predict sentiment of new text"""
+    inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=128)
+    outputs = model(**inputs)
+    prediction = torch.argmax(outputs.logits, dim=1).item()
+    label_map = {0: 'Negative', 1: 'Positive'}
+    return label_map[prediction]
+
+test_texts = [
+    "This product is amazing! I love it!",
+    "Terrible quality, waste of money.",
+    "It's okay, nothing special."
+]
+
+for text in test_texts:
+    sentiment = predict_sentiment(text)
+    print(f"\nText: {text}")
+    print(f"Predicted Sentiment: {sentiment}")
