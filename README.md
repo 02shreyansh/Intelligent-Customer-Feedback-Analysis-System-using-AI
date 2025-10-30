@@ -16,8 +16,8 @@ This project implements an end-to-end customer feedback analysis pipeline that i
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/feedback-analysis-system.git
-cd feedback-analysis-system
+git clone https://github.com/yourusername/Intelligent-Customer-Feedback-Analysis-System-using-AI
+cd Intelligent-Customer-Feedback-Analysis-System-using-AI
 ```
 
 ### 2. Create Virtual Environment
@@ -86,7 +86,7 @@ python text_summarization.py
 
 ### Part 4: Predictive Insights
 ```bash
-python predictive_insights.py
+python insights_Generation.py
 ```
 **Outputs**:
 - `recurring_issues.csv`
@@ -116,7 +116,7 @@ streamlit run app.py
 
 ### AI Chatbot
 ```bash
-streamlit run chatbot.py
+python Ai_chatbot.py
 ```
 **Features**:
 - Natural language query interface
