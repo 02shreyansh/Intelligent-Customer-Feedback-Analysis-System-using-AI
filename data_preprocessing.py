@@ -25,7 +25,6 @@ df['timestamp'] = pd.date_range(start='2023-01-01', periods=len(df), freq='H')
 df['source'] = np.random.choice(['email', 'chat', 'social_media'], len(df))
 df.rename(columns={'text': 'feedback_text', 'label': 'original_label'}, inplace=True)
 df.drop_duplicates(subset=['feedback_text'], inplace=True)
-
 print(df.isnull().sum())
 
 def clean_text(text):
@@ -58,12 +57,9 @@ def lemmatize_tokens(tokens):
 
 df['lemmatized_tokens'] = df['tokens_no_stopwords'].apply(lemmatize_tokens)
 df['processed_text'] = df['lemmatized_tokens'].apply(lambda x: ' '.join(x))
-
-
 df['word_count'] = df['processed_text'].apply(lambda x: len(x.split()))
 df = df[df['word_count'] >= 3]
 df = df[df['word_count'] <= 500]
 
-df.to_csv('cleaned_feedback_data.csv', index=False)
-
-df[['feedback_id', 'processed_text', 'original_label', 'timestamp', 'source']].to_csv('processed_data.csv', index=False)
+df.to_csv('/data/csv/cleaned_feedback_data.csv', index=False)
+df[['feedback_id', 'processed_text', 'original_label', 'timestamp', 'source']].to_csv('/data/csv/processed_data.csv', index=False)
