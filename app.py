@@ -45,8 +45,8 @@ page = st.sidebar.radio("Select Module", [
 @st.cache_resource
 def load_sentiment_model():
     try:
-        tokenizer = DistilBertTokenizer.from_pretrained('../Sentimental_model')
-        model = DistilBertForSequenceClassification.from_pretrained('../Sentimental_model')
+        tokenizer = DistilBertTokenizer.from_pretrained('sentiment_model')
+        model = DistilBertForSequenceClassification.from_pretrained('sentiment_model')
         return tokenizer, model
     except:
         st.warning("Sentiment model not found. Please train the model first.")
@@ -55,7 +55,7 @@ def load_sentiment_model():
 @st.cache_data
 def load_data():
     try:
-        df = pd.read_csv('/data/csv/processed_data.csv')
+        df = pd.read_csv('dataset/csv/processed_data.csv')
         df['timestamp'] = pd.to_datetime(df['timestamp'])
         return df
     except:
@@ -151,7 +151,7 @@ elif page == "Upload & Analyze":
                     st.download_button(
                         label="Download Analyzed Data",
                         data=csv,
-                        file_name="/data/csv/analyzed_feedback.csv",
+                        file_name="analyzed_feedback.csv",
                         mime="text/csv"
                     )
 
@@ -233,7 +233,7 @@ elif page == "Text Summarization":
     st.markdown("---")
     st.subheader("Pre-generated Summaries")
     try:
-        summaries_df = pd.read_csv('/data/csv/bart_summaries.csv')
+        summaries_df = pd.read_csv('dataset/csv/bart_summaries.csv')
         st.dataframe(summaries_df)
     except:
         st.info("No pre-generated summaries available. Run the summarization script first.")
@@ -241,7 +241,7 @@ elif page == "Text Summarization":
 elif page == "Predictive Insights":
     st.header("Predictive Analytics & Insights")
     try:
-        with open('/data/json/insights_data.json', 'r') as f:
+        with open('dataset/json/insights_data.json', 'r') as f:
             insights = json.load(f)
         st.subheader("Key Metrics")
         col1, col2, col3 = st.columns(3)
@@ -266,7 +266,7 @@ elif page == "Predictive Insights":
         
         st.markdown("---")
         st.subheader("Top Recurring Issues")
-        issues_df = pd.read_csv('/data/csv/recurring_issues.csv')
+        issues_df = pd.read_csv('dataset/csv/recurring_issues.csv')
         fig = px.bar(
             issues_df.head(10),
             x='Frequency',
@@ -276,7 +276,7 @@ elif page == "Predictive Insights":
         )
         st.plotly_chart(fig, use_container_width=True)
         st.subheader("Satisfaction Forecast (Next 30 Days)")
-        forecast_df = pd.read_csv('/data/csv/satisfaction_forecast.csv')
+        forecast_df = pd.read_csv('dataset/csv/satisfaction_forecast.csv')
         forecast_df['date'] = pd.to_datetime(forecast_df['date'])
         fig = go.Figure()
         fig.add_trace(go.Scatter(
@@ -318,12 +318,12 @@ elif page == "Reports":
     col1, col2 = st.columns(2)
     with col1:
         files = [
-            ('/data/csv/cleaned_feedback_data.csv', 'Cleaned Dataset'),
-            ('/data/csv/processed_data.csv', 'Processed Data'),
-            ('/data/csv/evaluation_metrics.csv', 'Model Metrics'),
-            ('/data/csv/recurring_issues.csv', 'Recurring Issues'),
-            ('/data/csv/satisfaction_forecast.csv', 'Satisfaction Forecast'),
-            ('/data/text/AI_insights_report.txt', 'Insights Report')
+            ('dataset/csv/cleaned_feedback_data.csv', 'Cleaned Dataset'),
+            ('dataset/csv/processed_data.csv', 'Processed Data'),
+            ('dataset/csv/evaluation_metrics.csv', 'Model Metrics'),
+            ('dataset/csv/recurring_issues.csv', 'Recurring Issues'),
+            ('dataset/csv/satisfaction_forecast.csv', 'Satisfaction Forecast'),
+            ('dataset/text/AI_insights_report.txt', 'Insights Report')
         ]
         for filename, description in files:
             try:
@@ -338,7 +338,7 @@ elif page == "Reports":
                 st.info(f"{description} not available yet")
     with col2:
         try:
-            st.image('/data/image/insights_visualization.png', caption='Insights Dashboard')
+            st.image('dataset/image/insights_visualization.png', caption='Insights Dashboard')
         except:
             st.info("Visualization not generated yet")
     
@@ -346,7 +346,7 @@ elif page == "Reports":
 
     st.subheader("Full Insights Report")
     try:
-        with open('/data/text/AI_insights_report.txt', 'r') as f:
+        with open('dataset/text/AI_insights_report.txt', 'r') as f:
             report = f.read()
         st.text_area("Report Content", report, height=400)
     except:

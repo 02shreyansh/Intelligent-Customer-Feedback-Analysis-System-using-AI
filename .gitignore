@@ -1,5 +1,7 @@
 myenv
-report 
 logs
+results
 sentiment_model
 wandb
+dataset
+sentiment_model.pkl
