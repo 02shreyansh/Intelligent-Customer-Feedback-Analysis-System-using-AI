@@ -1,6 +1,4 @@
-# Bonus: AI Chatbot for Customer Insights
 from transformers import pipeline
-
 class FeedbackChatbot:
     def __init__(self):
         self.qa_pipeline = pipeline("question-answering", 
@@ -8,7 +6,6 @@ class FeedbackChatbot:
         self.feedback_context = self.prepare_context()
     
     def prepare_context(self):
-        """Prepare context from analyzed feedback"""
         positive_feedback = processed_df[processed_df['sentiment'] == 'positive']['feedback'].tolist()
         negative_feedback = processed_df[processed_df['sentiment'] == 'negative']['feedback'].tolist()
         
@@ -33,15 +30,11 @@ class FeedbackChatbot:
         - Provide better product information
         - Streamline return processes
         """
-        
-        # Add sample feedbacks
         context += "\nSample Positive Feedbacks:\n" + "\n".join(positive_feedback[:3])
         context += "\nSample Negative Feedbacks:\n" + "\n".join(negative_feedback[:3])
-        
         return context
     
     def ask_question(self, question):
-        """Answer questions based on feedback analysis"""
         try:
             result = self.qa_pipeline(
                 question=question,
@@ -50,20 +43,14 @@ class FeedbackChatbot:
             )
             return result['answer']
         except:
-            return "I'm sorry, I couldn't process that question. Please try rephrasing."
-
-# Test the chatbot
-print("🤖 Testing AI Chatbot for Feedback Insights...")
+            return "I'm sorry, I couldn't process that question. Please try again."
 chatbot = FeedbackChatbot()
-
 test_questions = [
     "What are the main positive themes in customer feedback?",
     "What issues do customers complain about most?",
     "What suggestions do customers have for improvement?"
 ]
-
 for question in test_questions:
     answer = chatbot.ask_question(question)
-    print(f"\n❓ Question: {question}")
-    print(f"🤖 Answer: {answer}")
-    print("-" * 80)
+    print(f"\nQuestion: {question}")
+    print(f"Answer: {answer}")
