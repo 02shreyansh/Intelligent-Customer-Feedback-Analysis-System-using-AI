@@ -9,9 +9,8 @@ from datetime import datetime, timedelta
 import warnings
 warnings.filterwarnings('ignore')
 
-df = pd.read_csv('/data/processed_data.csv')
+df = pd.read_csv('/data/csv/processed_data.csv')
 df['timestamp'] = pd.to_datetime(df['timestamp'])
-
 df['sentiment'] = df['original_label']
 df['sentiment_label'] = df['sentiment'].map({0: 'Negative', 1: 'Positive'})
 negative_feedback = df[df['sentiment'] == 0]['processed_text'].tolist()
@@ -24,7 +23,6 @@ issue_df = pd.DataFrame({
     'Issue/Complaint': ngram_names,
     'Frequency': ngram_freq
 }).sort_values('Frequency', ascending=False)
-
 issue_categories = {
     'Quality Issues': [],
     'Delivery Problems': [],
@@ -32,7 +30,6 @@ issue_categories = {
     'Price Concerns': [],
     'Product Defects': []
 }
-
 for issue in issue_df['Issue/Complaint'].head(20):
     if any(word in issue for word in ['quality', 'poor', 'bad', 'defect']):
         issue_categories['Quality Issues'].append(issue)
@@ -50,9 +47,8 @@ for category, issues in issue_categories.items():
     for issue in issues[:3]:
         print(f"  - {issue}")
 
-issue_df.to_csv('recurring_issues.csv', index=False)
+issue_df.to_csv('/data/csv/recurring_issues.csv', index=False)
 df['satisfaction_score'] = df['sentiment'].map({0: 1, 1: 5, 2: 3})
-
 daily_satisfaction = df.groupby(df['timestamp'].dt.date).agg({
     'satisfaction_score': 'mean',
     'feedback_id': 'count'
@@ -76,12 +72,11 @@ forecast = model.predict(future)
 future_predictions = forecast[forecast['ds'] > daily_satisfaction['date'].max()][['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
 future_predictions.columns = ['date', 'predicted_satisfaction', 'lower_bound', 'upper_bound']
 print(future_predictions.head(10))
-
 current_avg = daily_satisfaction['avg_satisfaction'].tail(7).mean()
 predicted_avg = future_predictions['predicted_satisfaction'].mean()
 trend = "Improving" if predicted_avg > current_avg else "Declining"
 trend_pct = ((predicted_avg - current_avg) / current_avg) * 100
-future_predictions.to_csv('satisfaction_forecast.csv', index=False)
+future_predictions.to_csv('/data/csv/satisfaction_forecast.csv', index=False)
 
 plt.style.use('seaborn-v0_8-darkgrid')
 fig, axes = plt.subplots(2, 2, figsize=(15, 10))
@@ -108,7 +103,7 @@ axes[1, 1].set_ylabel('Count')
 axes[1, 1].set_title('Feedback Volume by Source', fontsize=14, fontweight='bold')
 
 plt.tight_layout()
-plt.savefig('insights_visualization.png', dpi=300, bbox_inches='tight')
+plt.savefig('/data/image/insights_visualization.png', dpi=300, bbox_inches='tight')
 total_feedback = len(df)
 positive_pct = (df['sentiment'] == 1).sum() / total_feedback * 100
 negative_pct = (df['sentiment'] == 0).sum() / total_feedback * 100
@@ -220,9 +215,9 @@ Models Used:
 END OF REPORT
 """
 
-with open('AI_insights_report.txt', 'w') as f:
+with open('/data/text/AI_insights_report.txt', 'w') as f:
     f.write(report_content)
 
 import json
-with open('insights_data.json', 'w') as f:
+with open('/data/json/insights_data.json', 'w') as f:
     json.dump(insights, f, indent=2)
