@@ -1,4 +1,4 @@
-# 🤖 Intelligent Customer Feedback Analysis System using AI
+# 🤖 Intelligent Customer Feedback Analysis System
 
 A comprehensive AI-based system for analyzing, summarizing, and predicting customer sentiment from feedback data using state-of-the-art NLP models.
 
@@ -11,34 +11,6 @@ This project implements an end-to-end customer feedback analysis pipeline that i
 - Predictive analytics and trend forecasting
 - Interactive web application
 - AI chatbot for insights exploration
-
-## 🗂️ Project Structure
-
-```
-feedback-analysis-system/
-│
-├── data_preprocessing.py          # Part 1: Data handling
-├── sentiment_model.py              # Part 2: Sentiment classification
-├── text_summarization.py           # Part 3: Summarization
-├── predictive_insights.py          # Part 4: Analytics & forecasting
-├── app.py                          # Part 5: Streamlit web app
-├── chatbot.py                      # Bonus: AI chatbot
-│
-├── requirements.txt                # Dependencies
-├── README.md                       # Documentation
-│
-├── cleaned_feedback_data.csv       # Output: Cleaned data
-├── processed_data.csv              # Output: Processed data
-├── evaluation_metrics.csv          # Output: Model metrics
-├── recurring_issues.csv            # Output: Issues analysis
-├── satisfaction_forecast.csv       # Output: Predictions
-├── AI_insights_report.txt          # Output: Final report
-│
-└── sentiment_model/                # Trained model directory
-    ├── config.json
-    ├── pytorch_model.bin
-    └── tokenizer files
-```
 
 ## 🚀 Installation & Setup
 
