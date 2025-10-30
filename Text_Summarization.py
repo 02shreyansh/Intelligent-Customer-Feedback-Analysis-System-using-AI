@@ -7,14 +7,13 @@ import networkx as nx
 import warnings
 warnings.filterwarnings('ignore')
 
-df = pd.read_csv('processed_data.csv')
+df = pd.read_csv('/data/csv/processed_data.csv')
 long_feedback = df[df['processed_text'].str.split().str.len() > 50].copy()
 
 bart_tokenizer = BartTokenizer.from_pretrained('facebook/bart-large-cnn')
 bart_model = BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
 
 def bart_summarize(text, max_length=150, min_length=50):
-    """using BART model"""
     inputs = bart_tokenizer([text], max_length=1024, return_tensors='pt', truncation=True)
     summary_ids = bart_model.generate(
         inputs['input_ids'],
@@ -27,13 +26,11 @@ def bart_summarize(text, max_length=150, min_length=50):
     return summary
 
 sample_texts = long_feedback['processed_text'].head(5).tolist()
-
 bart_summaries = []
 for idx, text in enumerate(sample_texts, 1):
     print(f"\nProcessing feedback {idx}/5...")
     short_summary = bart_summarize(text, max_length=50, min_length=20)
     detailed_summary = bart_summarize(text, max_length=150, min_length=50)
-    
     bart_summaries.append({
         'feedback_id': idx,
         'original_text': text[:200] + '...',
@@ -49,7 +46,6 @@ bart_df.to_csv('bart_summaries.csv', index=False)
 def extractive_summarize(text, num_sentences=3):
     sentences = text.split('.')
     sentences = [s.strip() for s in sentences if len(s.strip()) > 10]
-    
     if len(sentences) <= num_sentences:
         return '. '.join(sentences) + '.'
     vectorizer = TfidfVectorizer()
@@ -65,7 +61,6 @@ def extractive_summarize(text, num_sentences=3):
     return summary
 
 extractive_summaries = []
-
 for idx, text in enumerate(sample_texts, 1):
     print(f"\nProcessing feedback {idx}/5...")
     short_summary = extractive_summarize(text, num_sentences=2)
@@ -82,9 +77,7 @@ for idx, text in enumerate(sample_texts, 1):
     print(f"Detailed Summary: {detailed_summary}")
 
 extractive_df = pd.DataFrame(extractive_summaries)
-extractive_df.to_csv('extractive_summaries.csv', index=False)
-
-
+extractive_df.to_csv('/data/csv/extractive_summaries.csv', index=False)
 comparison_data = []
 for i in range(len(sample_texts)):
     comparison_data.append({
@@ -98,18 +91,14 @@ for i in range(len(sample_texts)):
 
 comparison_df = pd.DataFrame(comparison_data)
 print(comparison_df)
-
-comparison_df.to_csv('summary_comparison.csv', index=False)
-
+comparison_df.to_csv('/data/csv/summary_comparison.csv', index=False)
 
 example_idx = 0
-
 summary_output = {
     'total_feedback_analyzed': len(long_feedback),
     'summaries_generated': len(sample_texts),
     'methods_used': ['BART (Transformer)', 'TF-IDF + Cosine Similarity (Extractive)'],
-    'output_files': ['bart_summaries.csv', 'extractive_summaries.csv', 'summary_comparison.csv']
+    'output_files': ['/data/csv/bart_summaries.csv', '/data/csv/extractive_summaries.csv', '/data/csv/summary_comparison.csv']
 }
-
 for key, value in summary_output.items():
     print(f"{key}: {value}")
