@@ -36,7 +36,6 @@ def clean_text(text):
     return text
 
 df['cleaned_text'] = df['feedback_text'].apply(clean_text)
-print("Sample cleaned text:")
 print(df[['feedback_text', 'cleaned_text']].head(2))
 
 def tokenize_text(text):
